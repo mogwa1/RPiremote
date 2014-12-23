@@ -9,7 +9,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 
-public class DisplayMessageActivity extends ActionBarActivity {
+
+public class SettingsActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +21,7 @@ public class DisplayMessageActivity extends ActionBarActivity {
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
         // Set the text view as the activity layout
-        setContentView(R.layout.activity_display_message);
+        setContentView(R.layout.activity_settings);
 
         // Create the text view
         TextView textView = (TextView) findViewById(R.id.my_textview);
@@ -29,13 +30,14 @@ public class DisplayMessageActivity extends ActionBarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.message_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_display_message, menu);
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
         return true;
     }
 
@@ -53,4 +55,7 @@ public class DisplayMessageActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
+
+

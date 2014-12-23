@@ -1,33 +1,83 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar"
         android:id="@+id/main_toolbar" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:id="@+id/linearlayout1"
-        android:layout_below="@+id/main_toolbar">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
 
-        <EditText
-            android:hint="@string/hello_world"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/edit_message"
-            android:layout_weight="1" />
+        <ToggleButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="@string/btsync_button_title"
+            android:id="@+id/btsyncbutton"
+            android:layout_weight="1"
+            android:enabled="true"
+            android:height="100dp"
+            android:layout_margin="5dp"
+            android:textOn="BTSync\nON"
+            android:textOff="BTSync\nOFF"
+            android:onClick="toggleButtons" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send"
-            android:id="@+id/button1"
-            android:onClick="sendMessage"/>
+        <ToggleButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="@string/xbmc_button_title"
+            android:id="@+id/xbmcbutton"
+            android:layout_weight="1"
+            android:enabled="true"
+            android:height="100dp"
+            android:layout_margin="5dp"
+            android:onClick="toggleButtons"
+            android:textOff="XBMC\nOFF"
+            android:textOn="XBMC\nON" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <ToggleButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="@string/xbmc_kids_button_title"
+            android:id="@+id/xbmckidsbutton"
+            android:layout_weight="1"
+            android:enabled="true"
+            android:height="100dp"
+            android:layout_margin="5dp"
+            android:onClick="toggleButtons"
+            android:textOff="XBMC (kids)\nOFF"
+            android:textOn="XBMC (kids)\nON" />
+
+        <ToggleButton
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="@string/deluge_button_title"
+            android:id="@+id/delugebutton"
+            android:layout_weight="1"
+            android:enabled="true"
+            android:height="100dp"
+            android:layout_margin="5dp"
+            android:onClick="toggleButtons"
+            android:textOff="Deluge\nOFF"
+            android:textOn="Deluge\nON" />
+    </LinearLayout>
+
 
 </LinearLayout>
-</RelativeLayout>
