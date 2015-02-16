@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.widget.EditText;
 import android.widget.ToggleButton;
 
+import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
@@ -60,7 +61,7 @@ public class MainActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
-    /** Called when the user clicks the Settings button */
+    /** Called when the user clicks the Toggle buttons */
     public void toggleButtons(View view) {
         ToggleButton thisbutton     = (ToggleButton) view;
         ToggleButton btsyncbutton   = (ToggleButton) findViewById(R.id.btsyncbutton);
@@ -103,64 +104,66 @@ public class MainActivity extends ActionBarActivity {
             xbmckidsbutton.setChecked(false);
         }
 
-        //sshConnect ssh = new sshConnect();
-        //ssh.execute();
+        sshConnect sshconnect = new sshConnect();
+        sshconnect.execute();
+
     }
 
+    public class sshConnect extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            JSch jsch = new JSch();
+            try {
+                Session session = jsch.getSession("bart", "192.168.1.120", 22);
+                session.setPassword("master12");
+                session.setConfig("StrictHostKeyChecking", "no");
+                session.connect(3000);
+                ChannelExec channel = (ChannelExec) session.openChannel("exec");
+                channel.setOutputStream(System.out);
+                channel.setErrStream(System.err);
+                channel.setCommand("bin/stats");
+                channel.connect(3000);
+                channel.disconnect();
+            } catch(Exception e){
+                System.out.println(e);
+            }
+            return null;
+        }
+    }
 
-    public static class sshSession {
-        String host = "84.196.14.200";
-        String user = "bart";
-        String pwd = "master12";
-        int port = 2222;
-        JSch jsch = new JSch();
+    private class sshSession {
+        JSch jsch;
         Session session;
-        public Session Met1 (){
+
+        sshSession() {
+            jsch = new JSch();
+        }
+
+        sshSession(String user, String host, int port, String pwd) {
+            jsch = new JSch();
+            open(user, host, port, pwd);
+        }
+
+        public void open(String user, String host, int port, String pwd) {
             try {
                 session = jsch.getSession(user, host, port);
                 session.setPassword(pwd);
                 session.setConfig("StrictHostKeyChecking", "no");
-            } catch (Exception e2){
-                System.out.println(e2.getMessage());
-            }return session;
+                session.connect(3000);
+            } catch(Exception e){
+                System.out.println(e);
+            }
         }
-        public Session damesession (){
+
+        public Session getSession() {
             return session;
         }
-        public void close_ses(){
+
+        public void close() {
             session.disconnect();
         }
     }
 
-    public class sshConnect extends AsyncTask<String, Void, String> {
-        ByteArrayOutputStream Baos = new ByteArrayOutputStream();
-        ByteArrayInputStream Bais = new ByteArrayInputStream(new byte[1000]);
 
-        @Override
-        protected String doInBackground(String... data) {
-            sshSession jschses = new sshSession();
-            Session ses = null;
-            ses = jschses.Met1();
-            try {
-                ses.connect();
-                ChannelExec channel = (ChannelExec) ses.openChannel("exec");
-                channel.setOutputStream(Baos);
-                channel.setInputStream(Bais);
-                //Run Command
-                channel.setCommand("stats");
-                channel.connect();
-                try {
-                    Thread.sleep(350);
-                } catch (Exception ee) {
-                }
-                channel.disconnect();
-                //session.disconnect();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            return Baos.toString();
-
-        }
-    }
 
 }
