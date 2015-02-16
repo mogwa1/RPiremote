@@ -23,6 +23,8 @@ import java.io.ByteArrayOutputStream;
 public class MainActivity extends ActionBarActivity {
     public final static String EXTRA_MESSAGE = "be.devries-aerts.RPiremote.MESSAGE";
 
+    private sshSession sshSes = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +66,8 @@ public class MainActivity extends ActionBarActivity {
     public void toggleButtons(View view) {
         ToggleButton thisbutton     = (ToggleButton) view;
         ToggleButton btsyncbutton   = (ToggleButton) findViewById(R.id.btsyncbutton);
-        ToggleButton xbmcbutton     = (ToggleButton) findViewById(R.id.xbmcbutton);
-        ToggleButton xbmckidsbutton = (ToggleButton) findViewById(R.id.xbmckidsbutton);
+        ToggleButton kodibutton     = (ToggleButton) findViewById(R.id.kodibutton);
+        ToggleButton kodikidsbutton = (ToggleButton) findViewById(R.id.kodikidsbutton);
         ToggleButton delugebutton   = (ToggleButton) findViewById(R.id.delugebutton);
 
         if (!thisbutton.isChecked()) {
@@ -74,92 +76,139 @@ public class MainActivity extends ActionBarActivity {
         thisbutton.setTypeface(Typeface.DEFAULT_BOLD);
 
         if (thisbutton == btsyncbutton) {
-            xbmcbutton.setTypeface(Typeface.DEFAULT);
-            xbmckidsbutton.setTypeface(Typeface.DEFAULT);
+            kodibutton.setTypeface(Typeface.DEFAULT);
+            kodikidsbutton.setTypeface(Typeface.DEFAULT);
             delugebutton.setTypeface(Typeface.DEFAULT);
-            xbmcbutton.setChecked(false);
-            xbmckidsbutton.setChecked(false);
+            kodibutton.setChecked(false);
+            kodikidsbutton.setChecked(false);
             delugebutton.setChecked(false);
-        } else if (thisbutton == xbmcbutton) {
+        } else if (thisbutton == kodibutton) {
             btsyncbutton.setTypeface(Typeface.DEFAULT);
-            xbmckidsbutton.setTypeface(Typeface.DEFAULT);
+            kodikidsbutton.setTypeface(Typeface.DEFAULT);
             delugebutton.setTypeface(Typeface.DEFAULT);
             btsyncbutton.setChecked(false);
-            xbmckidsbutton.setChecked(false);
+            kodikidsbutton.setChecked(false);
             delugebutton.setChecked(false);
-        } else if (thisbutton == xbmckidsbutton) {
+        } else if (thisbutton == kodikidsbutton) {
             btsyncbutton.setTypeface(Typeface.DEFAULT);
-            xbmcbutton.setTypeface(Typeface.DEFAULT);
+            kodibutton.setTypeface(Typeface.DEFAULT);
             delugebutton.setTypeface(Typeface.DEFAULT);
             btsyncbutton.setChecked(false);
-            xbmcbutton.setChecked(false);
+            kodibutton.setChecked(false);
             delugebutton.setChecked(false);
         } else if (thisbutton == delugebutton) {
             btsyncbutton.setTypeface(Typeface.DEFAULT);
-            xbmcbutton.setTypeface(Typeface.DEFAULT);
-            xbmckidsbutton.setTypeface(Typeface.DEFAULT);
+            kodibutton.setTypeface(Typeface.DEFAULT);
+            kodikidsbutton.setTypeface(Typeface.DEFAULT);
             btsyncbutton.setChecked(false);
-            xbmcbutton.setChecked(false);
-            xbmckidsbutton.setChecked(false);
+            kodibutton.setChecked(false);
+            kodikidsbutton.setChecked(false);
         }
 
-        //sshConnect ssh = new sshConnect();
-        //ssh.execute();
+        sshConnect ssh = new sshConnect();
+        ssh.execute();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        System.out.println("onPause called");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("onResume called");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("onStop called");
+        sshSes.closeSession();
+        sshSes = null;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        System.out.println("onStart called");
+        sshSes = new sshSession();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        System.out.println("onRestart called");
+    }
 
     public static class sshSession {
-        String host = "84.196.14.200";
+        String host = "192.168.56.2";
         String user = "bart";
         String pwd = "master12";
-        int port = 2222;
+        int port = 22;
         JSch jsch = new JSch();
-        Session session;
-        public Session Met1 (){
-            try {
-                session = jsch.getSession(user, host, port);
-                session.setPassword(pwd);
-                session.setConfig("StrictHostKeyChecking", "no");
-            } catch (Exception e2){
-                System.out.println(e2.getMessage());
-            }return session;
-        }
-        public Session damesession (){
+        Session session = null;
+        boolean connected = false;
+        public Session getSession (){
+            if (!connected) {
+                try {
+                    session = jsch.getSession(user, host, port);
+                    session.setPassword(pwd);
+                    session.setConfig("StrictHostKeyChecking", "no");
+                    session.connect();
+                    connected = true;
+                } catch (Exception e2) {
+                    System.out.println(e2.getMessage());
+                    session = null;
+                }
+            }
             return session;
         }
-        public void close_ses(){
+
+        public void closeSession(){
+            connected = false;
             session.disconnect();
         }
     }
 
     public class sshConnect extends AsyncTask<String, Void, String> {
         ByteArrayOutputStream Baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream Baes = new ByteArrayOutputStream();
         ByteArrayInputStream Bais = new ByteArrayInputStream(new byte[1000]);
 
         @Override
         protected String doInBackground(String... data) {
-            sshSession jschses = new sshSession();
-            Session ses = null;
-            ses = jschses.Met1();
+            //sshSession jschses = new sshSession();
+            //Session ses = null;
+            //ses = jschses.Met1();
             try {
-                ses.connect();
+                Session ses = sshSes.getSession();
                 ChannelExec channel = (ChannelExec) ses.openChannel("exec");
                 channel.setOutputStream(Baos);
-                channel.setInputStream(Bais);
+                channel.setErrStream(Baes);
+                //channel.setInputStream(Bais);
                 //Run Command
-                channel.setCommand("stats");
-                channel.connect();
-                try {
-                    Thread.sleep(350);
-                } catch (Exception ee) {
-                }
+                channel.setCommand("./stats");
+                channel.connect(10);
+                //try {
+                //    Thread.sleep(350);
+                //} catch (Exception ee) {
+                //}
                 channel.disconnect();
                 //session.disconnect();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
+            //System.out.println("error");
+            //System.out.println(Baes.toString());
+            //System.out.println("output");
+            //System.out.println(Baos.toString());
             return Baos.toString();
+        }
 
+        protected void onPostExecute(String output) {
+            System.out.println(output);
         }
     }
 

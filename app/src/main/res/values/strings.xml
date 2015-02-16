@@ -6,8 +6,8 @@
     <string name="action_settings">Settings</string>
     <string name="title_settings">Settings</string>
     <string name="btsync_button_title">BTSync</string>
-    <string name="xbmc_button_title">XBMC</string>
-    <string name="xbmc_kids_button_title">XBMC (kids)</string>
+    <string name="kodi_button_title">KODI</string>
+    <string name="kodi_kids_button_title">KODI (kids)</string>
     <string name="deluge_button_title">Deluge</string>
 
 </resources>

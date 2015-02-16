@@ -33,15 +33,15 @@
         <ToggleButton
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="@string/xbmc_button_title"
-            android:id="@+id/xbmcbutton"
+            android:text="@string/kodi_button_title"
+            android:id="@+id/kodibutton"
             android:layout_weight="1"
             android:enabled="true"
             android:height="100dp"
             android:layout_margin="5dp"
             android:onClick="toggleButtons"
-            android:textOff="XBMC\nOFF"
-            android:textOn="XBMC\nON" />
+            android:textOff="KODI\nOFF"
+            android:textOn="KODI\nON" />
 
     </LinearLayout>
 
@@ -55,15 +55,16 @@
         <ToggleButton
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="@string/xbmc_kids_button_title"
-            android:id="@+id/xbmckidsbutton"
+            android:text="@string/kodi_kids_button_title"
+            android:id="@+id/kodikidsbutton"
             android:layout_weight="1"
             android:enabled="true"
             android:height="100dp"
             android:layout_margin="5dp"
             android:onClick="toggleButtons"
-            android:textOff="XBMC (kids)\nOFF"
-            android:textOn="XBMC (kids)\nON" />
+            android:textOff="KODI(kids)\nOFF"
+            android:textOn="KODI(kids)\nON"
+            android:singleLine="true" />
 
         <ToggleButton
             android:layout_width="fill_parent"
