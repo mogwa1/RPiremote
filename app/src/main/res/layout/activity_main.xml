@@ -28,7 +28,9 @@
             android:layout_margin="5dp"
             android:textOn="BTSync\nON"
             android:textOff="BTSync\nOFF"
-            android:onClick="toggleButtons" />
+            android:onClick="toggleButtons"
+            android:singleLine="false"
+            android:capitalize="none" />
 
         <ToggleButton
             android:layout_width="fill_parent"
@@ -41,7 +43,9 @@
             android:layout_margin="5dp"
             android:onClick="toggleButtons"
             android:textOff="KODI\nOFF"
-            android:textOn="KODI\nON" />
+            android:textOn="KODI\nON"
+            android:singleLine="false"
+            android:capitalize="none" />
 
     </LinearLayout>
 
@@ -62,9 +66,10 @@
             android:height="100dp"
             android:layout_margin="5dp"
             android:onClick="toggleButtons"
-            android:textOff="KODI(kids)\nOFF"
-            android:textOn="KODI(kids)\nON"
-            android:singleLine="true" />
+            android:textOff="KODI (kids)\nOFF"
+            android:textOn="KODI (kids)\nON"
+            android:singleLine="false"
+            android:capitalize="none" />
 
         <ToggleButton
             android:layout_width="fill_parent"
@@ -77,7 +82,9 @@
             android:layout_margin="5dp"
             android:onClick="toggleButtons"
             android:textOff="Deluge\nOFF"
-            android:textOn="Deluge\nON" />
+            android:textOn="Deluge\nON"
+            android:singleLine="false"
+            android:capitalize="none" />
     </LinearLayout>
 
 
