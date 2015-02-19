@@ -51,6 +51,9 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_settings:
                 openSettings();
                 return true;
+            case R.id.action_refresh:
+                refreshStatus();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -60,6 +63,12 @@ public class MainActivity extends ActionBarActivity {
     public void openSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    public void refreshStatus() {
+        sshSes = new sshSession();
+        sshConnect ssh = new sshConnect();
+        ssh.execute();
     }
 
     /** Called when the user clicks a button */
@@ -203,9 +212,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onStart() {
         super.onStart();
         System.out.println("onStart called");
-        sshSes = new sshSession();
-        sshConnect ssh = new sshConnect();
-        ssh.execute();
+        refreshStatus();
     }
 
     @Override
